@@ -7,15 +7,13 @@ pipeline {
     }
 
     stages {
-        // Stage 1: Pull code from GitHub
         stage('Checkout') {
             steps {
                 git branch: 'main', 
-                url: 'https://github.com/deepasha1511/Docker_Node.js.git'  
+                url: 'https://github.com/deepasha1511/Docker_Node.js.git'  // Fixed URL
             }
         }
 
-        // Stage 2: Build Docker image
         stage('Build') {
             steps {
                 script {
@@ -24,7 +22,6 @@ pipeline {
             }
         }
 
-        // Stage 3: Push to Docker Hub
         stage('Push') {
             steps {
                 script {
@@ -33,6 +30,15 @@ pipeline {
                     }
                 }
             }
+        }
+    }
+
+    post {
+        success {
+            echo "Success! Image: ${DOCKER_IMAGE}:${DOCKER_TAG}"
+        }
+        failure {
+            echo "Pipeline failed. Check logs."
         }
     }
 }
